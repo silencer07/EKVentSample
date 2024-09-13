@@ -6,12 +6,17 @@ import Colors from '@/constants/Colors';
 import {useColorScheme} from '@/components/useColorScheme';
 import HomeLogo from '@/assets/images/tabs/home.svg'
 import HomeInactiveLogo from '@/assets/images/tabs/home-inactive.svg'
+import HomeInactiveLightLogo from '@/assets/images/tabs/home-inactive-light.svg'
 import MediaLogo from '@/assets/images/tabs/media.svg'
 import MediaInactiveLogo from '@/assets/images/tabs/media-inactive.svg'
 import GamesLogo from '@/assets/images/tabs/games.svg'
+import GamesInactiveLogo from '@/assets/images/tabs/games-inactive.svg'
+import GamesInactiveLightLogo from '@/assets/images/tabs/games-inactive-light.svg'
 import ReportsLogo from '@/assets/images/tabs/reports.svg'
+import ReportsInactiveLogo from '@/assets/images/tabs/reports-inactive.svg'
+import ReportsInactiveLightLogo from '@/assets/images/tabs/reports-inactive-light.svg'
 import { Image } from 'expo-image';
-import {Pressable, StyleSheet, View} from "react-native";
+import {StyleSheet, View} from "react-native";
 import {EventArg, ParamListBase, RouteProp} from "@react-navigation/core";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
@@ -26,6 +31,7 @@ const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
 const tabs = ["index", "two", "three", "four", "five"]
+const darkTabs = [tabs[1]];
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -42,10 +48,13 @@ export default function TabLayout() {
     }
   }, [])
 
+  const isTabNotDark = darkTabs.indexOf(activeTab) === -1;
+  const tabBarActiveTintColor = isTabNotDark ? '#1F62C0' : 'white'
+
   const tabBarItemStyle = useCallback((tabName: string) => {
-    const additional = { borderColor: activeTab === tabName ? '#1F62C0' : 'transparent' };
+    const additional = { borderTopColor: activeTab === tabName ? tabBarActiveTintColor : 'transparent' };
     return {...styles.tabBarItemStyle, ...additional};
-    }, [activeTab]
+    }, [activeTab, tabBarActiveTintColor]
   );
 
   return (
@@ -54,14 +63,22 @@ export default function TabLayout() {
         tabPress: tabPressListener
       }}
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor,
         headerShown: false,
+        tabBarStyle: { backgroundColor: activeTab === tabs[1] ? '#161313' : 'white', borderColor: 'rgba(102, 102, 102, 0.16))' }
       }}>
       <Tabs.Screen
         name={tabs[0]}
         options={{
           title: 'Home',
-          tabBarIcon: ({ focused }) => focused ? <HomeLogo /> : <HomeInactiveLogo />,
+          tabBarIcon: ({ focused }) => {
+            if (focused) {
+              return <HomeLogo/>
+            } else if (isTabNotDark){
+              return <HomeInactiveLightLogo/>
+            }
+            return <HomeInactiveLogo/>
+          },
           tabBarItemStyle: tabBarItemStyle(tabs[0])
         }}
       />
@@ -77,7 +94,14 @@ export default function TabLayout() {
         name={tabs[2]}
         options={{
           title: 'Games',
-          tabBarIcon: ({ color }) => <GamesLogo />,
+          tabBarIcon: ({ focused }) => {
+            if (focused) {
+              return <GamesLogo/>
+            } else if (isTabNotDark){
+              return <GamesInactiveLightLogo/>
+            }
+            return <GamesInactiveLogo/>
+          },
           tabBarItemStyle: tabBarItemStyle(tabs[2])
         }}
       />
@@ -85,7 +109,14 @@ export default function TabLayout() {
         name={tabs[3]}
         options={{
           title: 'Reports',
-          tabBarIcon: ({ color }) => <ReportsLogo />,
+          tabBarIcon: ({ focused }) => {
+            if (focused) {
+              return <ReportsLogo/>
+            } else if (isTabNotDark){
+              return <ReportsInactiveLightLogo/>
+            }
+            return <ReportsInactiveLogo/>
+          },
           tabBarItemStyle: tabBarItemStyle(tabs[3])
         }}
       />
@@ -94,7 +125,7 @@ export default function TabLayout() {
         options={{
           title: 'Account',
           tabBarIcon: ({ color }) => (
-            <View style={styles.imageContainer}>
+            <View style={[styles.imageContainer, { borderColor: tabBarActiveTintColor }]}>
               <Image
                 style={styles.image}
                 source={require("@/assets/images/tabs/account.png")}
@@ -117,7 +148,6 @@ const styles = StyleSheet.create({
   imageContainer: {
     height: imageRadius * 2,
     width: imageRadius * 2,
-    borderColor: '#3361BA',
     borderWidth: 1.5,
     borderRadius: imageRadius,
     alignItems: 'center',
@@ -127,5 +157,12 @@ const styles = StyleSheet.create({
     width: imageRadius * 2,
     height: imageRadius * 2,
   },
-  tabBarItemStyle: { marginHorizontal: 10, borderTopWidth: 3 },
+  tabBarItemStyle: {
+    marginHorizontal: 10,
+    borderTopWidth: 3,
+    borderLeftWidth: 2.5,
+    borderRightWidth: 2.5,
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+  },
 });
