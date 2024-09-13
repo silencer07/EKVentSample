@@ -23,7 +23,13 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    SFPro: require('../assets/fonts/SF-Pro-Display-Regular.otf'),
+    SFProBlack: require('../assets/fonts/SF-Pro-Display-Black.otf'),
+    SFProBold: require('../assets/fonts/SF-Pro-Display-Bold.otf'),
+    SFProHeavy: require('../assets/fonts/SF-Pro-Display-Heavy.otf'),
+    SFProMedium: require('../assets/fonts/SF-Pro-Display-Medium.otf'),
+    SFProLight: require('../assets/fonts/SF-Pro-Display-Light.otf'),
+    SFProSemiBold: require('../assets/fonts/SF-Pro-Display-Semibold.otf'),
     ...FontAwesome.font,
   });
 
@@ -48,11 +54,11 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
+  // if we want to show a modal on top of tabs we configure it here
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
       </Stack>
     </ThemeProvider>
   );
