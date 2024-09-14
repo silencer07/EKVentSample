@@ -1,12 +1,18 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 
-import EditScreenInfo from '@/components/EditScreenInfo';
-import { Text, View } from '@/components/Themed';
+import {Typography} from "@/constants/Typography";
+import {useThemedTypography} from "@/components/Themed";
 
 export default function TabOneScreen() {
+  const typographyStyles = useThemedTypography();
+
   return (
     <View style={styles.container}>
-      <Text>Tab One</Text>
+      <Text style={typographyStyles.heading1}>Heading 1</Text>
+      <Text style={typographyStyles.heading2}>Heading 2</Text>
+      <Text style={typographyStyles.heading3}>Heading 3</Text>
+      <Text style={typographyStyles.title}>Title</Text>
+      <Text style={typographyStyles.subtitle}>Subtitle</Text>
     </View>
   );
 }

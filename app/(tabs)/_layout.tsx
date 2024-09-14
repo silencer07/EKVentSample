@@ -1,9 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import {Tabs} from 'expo-router';
-
-import Colors from '@/constants/Colors';
-import {useColorScheme} from '@/components/useColorScheme';
 import HomeLogo from '@/assets/images/tabs/home.svg'
 import HomeInactiveLogo from '@/assets/images/tabs/home-inactive.svg'
 import HomeInactiveLightLogo from '@/assets/images/tabs/home-inactive-light.svg'
@@ -15,9 +12,9 @@ import GamesInactiveLightLogo from '@/assets/images/tabs/games-inactive-light.sv
 import ReportsLogo from '@/assets/images/tabs/reports.svg'
 import ReportsInactiveLogo from '@/assets/images/tabs/reports-inactive.svg'
 import ReportsInactiveLightLogo from '@/assets/images/tabs/reports-inactive-light.svg'
-import { Image } from 'expo-image';
+import {Image} from 'expo-image';
 import {StyleSheet, View} from "react-native";
-import {EventArg, ParamListBase, RouteProp} from "@react-navigation/core";
+import {EventArg} from "@react-navigation/core";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -34,8 +31,6 @@ const tabs = ["index", "two", "three", "four", "five"]
 const darkTabs = [tabs[1]];
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   const [activeTab, setActiveTab] = useState('index');
   const tabPressListener = useCallback((e:  EventArg<"tabPress", true, undefined>) => {
     const parts = e.target?.split("-");
