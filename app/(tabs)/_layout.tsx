@@ -16,6 +16,7 @@ import {Image} from 'expo-image';
 import {StatusBar, StyleSheet, View} from "react-native";
 import {EventArg} from "@react-navigation/core";
 import {Platform} from "expo-modules-core";
+import {useThemeColor} from "@/components/Themed";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -44,8 +45,12 @@ export default function TabLayout() {
     }
   }, [])
 
+
   const isTabNotDark = darkTabs.indexOf(activeTab) === -1;
-  const tabBarActiveTintColor = isTabNotDark ? '#1F62C0' : 'white'
+
+  const tabBarActiveTintColor = useThemeColor('tabBarActiveTintColor', isTabNotDark ? 'light' : 'dark')
+  const tabColor = useThemeColor('tab', isTabNotDark ? 'light' : 'dark');
+  const tabBorderColor = useThemeColor('tabBorder', isTabNotDark ? 'light' : 'dark');
 
   const tabBarItemStyle = useCallback((tabName: string) => {
     const additional = { borderTopColor: activeTab === tabName ? tabBarActiveTintColor : 'transparent' };
@@ -60,7 +65,7 @@ export default function TabLayout() {
       }}
       screenOptions={{
         tabBarActiveTintColor,
-        tabBarStyle: { backgroundColor: activeTab === tabs[1] ? '#161313' : 'white', borderColor: 'rgba(102, 102, 102, 0.16))' }
+        tabBarStyle: { backgroundColor: tabColor, borderColor: tabBorderColor }
       }}>
       <Tabs.Screen
         name={tabs[0]}
