@@ -1,10 +1,8 @@
 import {StyleSheet, Text, View} from 'react-native';
-
-import {Typography} from "@/constants/Typography";
-import {useThemeColor, useThemedTypography} from "@/components/Themed";
+import {useThemedTypography} from "@/components/Themed";
 import {useState} from "react";
-import {Platform} from "expo-modules-core";
 import {Snackbar} from "@/components/snackbar";
+import {Shadow} from "react-native-shadow-2";
 
 export default function TabOneScreen() {
   const typographyStyles = useThemedTypography();

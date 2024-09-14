@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {StyleSheet, Text, View} from "react-native";
 import {Platform} from "expo-modules-core";
 import {Image} from "expo-image";
+import {Shadow} from "react-native-shadow-2";
 import {useThemedTypography} from "@/components/Themed";
 
 export interface SnackbarProps {
@@ -13,26 +14,28 @@ export function Snackbar({ title, subtitle }: SnackbarProps) {
   const typographyStyles = useThemedTypography();
 
   return (
-    <View style={styles.container} onLayout={(e) => setWidth(e.nativeEvent.layout.width) }>
-      <View style={styles.iconContainer}>
-        <Image
-          style={{ width: 34, height: 26 }}
-          source={require("@/assets/images/icons/heart.png")}
-          contentFit="contain"
-        />
-      </View>
-      <View style={{ ...styles.contentContainer, width: width - styles.iconContainer.width  }}>
-        <View style={styles.textContainer}>
-          <Text style={typographyStyles.title}>{title}</Text>
-          <Text style={typographyStyles.subtitle}>{subtitle}</Text>
+    <Shadow stretch distance={15} startColor={'rgba(102, 102, 102, 0.16)'} offset={[0, 15]}>
+      <View style={styles.container} onLayout={(e) => setWidth(e.nativeEvent.layout.width) }>
+        <View style={styles.iconContainer}>
+          <Image
+            style={{ width: 34, height: 26 }}
+            source={require("@/assets/images/icons/heart.png")}
+            contentFit="contain"
+          />
         </View>
-        <Image
-          style={{ width: 6, height: 12 }}
-          source={require("@/assets/images/icons/chevron.png")}
-          contentFit="contain"
-        />
+        <View style={{ ...styles.contentContainer, width: width - styles.iconContainer.width  }}>
+          <View style={styles.textContainer}>
+            <Text style={typographyStyles.title}>{title}</Text>
+            <Text style={typographyStyles.subtitle}>{subtitle}</Text>
+          </View>
+          <Image
+            style={{ width: 6, height: 12 }}
+            source={require("@/assets/images/icons/chevron.png")}
+            contentFit="contain"
+          />
+        </View>
       </View>
-    </View>
+    </Shadow>
   )
 }
 
@@ -49,7 +52,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     overflow: "hidden",
     minHeight: 64,
-    width: "100%"
+    width: "100%",
   },
   iconContainer: {
     width: 57,
@@ -61,7 +64,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flexDirection: 'row',
-    backgroundColor: "#F9BA0514",
+    backgroundColor: "#fdf9eb",
     borderTopRightRadius: 15,
     borderBottomRightRadius: 15,
     padding: 8,
