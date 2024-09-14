@@ -46,10 +46,12 @@ export default function TabLayout() {
 
 
   const isTabNotDark = darkTabs.indexOf(activeTab) === -1;
+  const preferredTheme = isTabNotDark ? 'light' : 'dark';
 
-  const tabBarActiveTintColor = useThemeColor('tabBarActiveTintColor', isTabNotDark ? 'light' : 'dark')
-  const tabColor = useThemeColor('tab', isTabNotDark ? 'light' : 'dark');
-  const tabBorderColor = useThemeColor('tabBorder', isTabNotDark ? 'light' : 'dark');
+  const tabBarActiveTintColor = useThemeColor('tabBarActiveTintColor', preferredTheme)
+  const tabColor = useThemeColor('tab', preferredTheme);
+  const tabBorderColor = useThemeColor('tabBorder', preferredTheme);
+  const screenBackgroundColor = useThemeColor('screenBackgroundColor', preferredTheme);
 
   const tabBarItemStyle = useCallback((tabName: string) => {
     const additional = { borderTopColor: activeTab === tabName ? tabBarActiveTintColor : 'transparent' };
@@ -62,6 +64,7 @@ export default function TabLayout() {
       screenListeners={{
         tabPress: tabPressListener
       }}
+      sceneContainerStyle={{ backgroundColor: screenBackgroundColor }}
       screenOptions={{
         tabBarActiveTintColor,
         tabBarStyle: { backgroundColor: tabColor, borderColor: tabBorderColor }
@@ -86,7 +89,7 @@ export default function TabLayout() {
             style={{ width: 187, height: 32 }}
             source={require("@/assets/images/logo.png")}
             contentFit="contain"
-          />
+          />,
         }}
       />
       <Tabs.Screen

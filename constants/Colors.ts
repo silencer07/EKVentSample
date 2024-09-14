@@ -9,6 +9,7 @@ export default {
     tab: 'white',
     tabBarActiveTintColor: '#3361BA',
     tabBorder: 'rgba(102, 102, 102, 0.16))',
+    screenBackgroundColor: 'white',
   },
   dark: {
     black: '#0A0C0B',
@@ -17,5 +18,6 @@ export default {
     tab: '#050505',
     tabBarActiveTintColor: 'white',
     tabBorder: 'rgba(102, 102, 102, 0.16))',
+    screenBackgroundColor: '#050505',
   },
 };
