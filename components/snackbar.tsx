@@ -14,11 +14,11 @@ export function Snackbar({ title, subtitle }: SnackbarProps) {
   const typographyStyles = useThemedTypography();
 
   return (
-    <Shadow stretch distance={15} startColor={'rgba(102, 102, 102, 0.16)'} offset={[0, 15]}>
+    <Shadow stretch distance={10} startColor={'rgba(102, 102, 102, 0.16)'} offset={[0, 10]}>
       <View style={styles.container} onLayout={(e) => setWidth(e.nativeEvent.layout.width) }>
         <View style={styles.iconContainer}>
           <Image
-            style={{ width: 34, height: 26 }}
+            style={styles.icon}
             source={require("@/assets/images/icons/heart.png")}
             contentFit="contain"
           />
@@ -29,7 +29,7 @@ export function Snackbar({ title, subtitle }: SnackbarProps) {
             <Text style={typographyStyles.subtitle}>{subtitle}</Text>
           </View>
           <Image
-            style={{ width: 6, height: 12 }}
+            style={styles.chevron}
             source={require("@/assets/images/icons/chevron.png")}
             contentFit="contain"
           />
@@ -62,6 +62,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
+  icon: { width: 34, height: 26 },
+  chevron: { width: 6, height: 12 },
   contentContainer: {
     flexDirection: 'row',
     backgroundColor: "#fdf9eb",

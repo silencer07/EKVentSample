@@ -18,6 +18,11 @@ export const Typography = StyleSheet.create({
     fontSize: 20,
     lineHeight: 24,
   },
+  heading4: {
+    fontFamily: "SFProSemiBold",
+    fontSize: 20,
+    lineHeight: 20,
+  },
   title: {
     fontFamily: "SFProSemiBold",
     fontSize: 17,
