@@ -1,5 +1,4 @@
 import React, {useCallback, useState} from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 import {Tabs} from 'expo-router';
 import HomeLogo from '@/assets/images/tabs/home.svg'
 import HomeInactiveLogo from '@/assets/images/tabs/home-inactive.svg'
@@ -16,14 +15,7 @@ import {Image} from 'expo-image';
 import {StyleSheet, View} from "react-native";
 import {EventArg} from "@react-navigation/core";
 import {useThemeColor} from "@/components/Themed";
-
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
+import {Spacings} from "@/constants/Spacings";
 
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
@@ -82,14 +74,32 @@ export default function TabLayout() {
             return <HomeInactiveLogo/>
           },
           tabBarItemStyle: tabBarItemStyle(tabs[0]),
+          headerTitleContainerStyle: tabOneStyles.headerTitleContainer,
           headerLeftLabelVisible: false,
-          headerLeftContainerStyle: styles.tabOneHeaderLeft,
-          headerTitle: '',
+          headerLeftContainerStyle: tabOneStyles.headerLeft,
           headerLeft: () => <Image
-            style={{ width: 187, height: 32 }}
+            style={tabOneStyles.headerLeftImage}
             source={require("@/assets/images/logo.png")}
             contentFit="contain"
           />,
+          headerRightContainerStyle: tabOneStyles.headerRight,
+          headerRight: () => <View style={tabOneStyles.headerRightContentWrapper}>
+            <Image
+              style={tabOneStyles.headerRightIcon}
+              source={require("@/assets/images/icons/search.png")}
+              contentFit="contain"
+            />
+            <Image
+              style={tabOneStyles.headerRightIcon}
+              source={require("@/assets/images/icons/message.png")}
+              contentFit="contain"
+            />
+            <Image
+              style={tabOneStyles.headerRightIcon}
+              source={require("@/assets/images/icons/notification.png")}
+              contentFit="contain"
+            />
+          </View>,
         }}
       />
       <Tabs.Screen
@@ -174,8 +184,34 @@ const styles = StyleSheet.create({
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
   },
-  tabOneHeaderLeft: {
-    height: '100%',
-    paddingVertical: 18
-  },
 });
+
+const tabOneStyles = StyleSheet.create({
+  headerTitleContainer: { display: 'none' },
+  headerLeft: {
+    height: '100%',
+    width: "50%",
+    paddingVertical: Spacings.padding,
+    paddingLeft: Spacings.padding,
+  },
+  headerLeftImage: {
+    width: "100%",
+    height: 32,
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    width: "100%",
+    paddingVertical: Spacings.padding,
+    paddingRight: Spacings.padding,
+  },
+  headerRightContentWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: "100%",
+    maxWidth: 95,
+  },
+  headerRightIcon: { width: 20, height: 20 },
+})
