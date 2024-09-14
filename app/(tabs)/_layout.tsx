@@ -13,9 +13,8 @@ import ReportsLogo from '@/assets/images/tabs/reports.svg'
 import ReportsInactiveLogo from '@/assets/images/tabs/reports-inactive.svg'
 import ReportsInactiveLightLogo from '@/assets/images/tabs/reports-inactive-light.svg'
 import {Image} from 'expo-image';
-import {StatusBar, StyleSheet, View} from "react-native";
+import {StyleSheet, View} from "react-native";
 import {EventArg} from "@react-navigation/core";
-import {Platform} from "expo-modules-core";
 import {useThemeColor} from "@/components/Themed";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
@@ -87,7 +86,6 @@ export default function TabLayout() {
             style={{ width: 187, height: 32 }}
             source={require("@/assets/images/logo.png")}
             contentFit="contain"
-            transition={1000}
           />
         }}
       />
@@ -140,7 +138,6 @@ export default function TabLayout() {
                 source={require("@/assets/images/tabs/account.png")}
                 placeholder={{ blurhash }}
                 contentFit="contain"
-                transition={1000}
               />
             </View>
           ),
