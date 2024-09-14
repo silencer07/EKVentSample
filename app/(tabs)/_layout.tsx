@@ -13,8 +13,9 @@ import ReportsLogo from '@/assets/images/tabs/reports.svg'
 import ReportsInactiveLogo from '@/assets/images/tabs/reports-inactive.svg'
 import ReportsInactiveLightLogo from '@/assets/images/tabs/reports-inactive-light.svg'
 import {Image} from 'expo-image';
-import {StyleSheet, View} from "react-native";
+import {StatusBar, StyleSheet, View} from "react-native";
 import {EventArg} from "@react-navigation/core";
+import {Platform} from "expo-modules-core";
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -59,7 +60,6 @@ export default function TabLayout() {
       }}
       screenOptions={{
         tabBarActiveTintColor,
-        headerShown: false,
         tabBarStyle: { backgroundColor: activeTab === tabs[1] ? '#161313' : 'white', borderColor: 'rgba(102, 102, 102, 0.16))' }
       }}>
       <Tabs.Screen
@@ -74,7 +74,16 @@ export default function TabLayout() {
             }
             return <HomeInactiveLogo/>
           },
-          tabBarItemStyle: tabBarItemStyle(tabs[0])
+          tabBarItemStyle: tabBarItemStyle(tabs[0]),
+          headerLeftLabelVisible: false,
+          headerLeftContainerStyle: styles.tabOneHeaderLeft,
+          headerTitle: '',
+          headerLeft: () => <Image
+            style={{ width: 187, height: 32 }}
+            source={require("@/assets/images/logo.png")}
+            contentFit="contain"
+            transition={1000}
+          />
         }}
       />
       <Tabs.Screen
@@ -159,5 +168,9 @@ const styles = StyleSheet.create({
     borderRightWidth: 2.5,
     borderLeftColor: 'transparent',
     borderRightColor: 'transparent',
+  },
+  tabOneHeaderLeft: {
+    height: '100%',
+    paddingVertical: 18
   },
 });
