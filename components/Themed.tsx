@@ -47,6 +47,10 @@ export function useThemedTypography(preferredScheme ?: keyof typeof Colors): Sty
       ...Typography.heading3,
       color,
     },
+    heading4: {
+      ...Typography.heading4,
+      color,
+    },
     title: {
       ...Typography.title,
       color,

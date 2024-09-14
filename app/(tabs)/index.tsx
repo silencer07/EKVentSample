@@ -4,6 +4,7 @@ import React, {useState} from "react";
 import {Snackbar} from "@/components/snackbar";
 import {Shadow} from "react-native-shadow-2";
 import {Image} from "expo-image";
+import {MediaList} from "@/components/MediaList";
 
 export default function TabOneScreen() {
   const typographyStyles = useThemedTypography();
@@ -20,9 +21,12 @@ export default function TabOneScreen() {
           <Image
             style={styles.mediaIcon}
             source={require("@/assets/images/icons/media.png")}
-            contentFit="contain"
+            contentFit="fill"
           />
-          <Text style={typographyStyles.heading4}>Media</Text>
+          <Text style={[typographyStyles.heading4, { lineHeight: 24 }]}>Media</Text>
+        </View>
+        <View style={{ width: '100%', minHeight: 250, height: '50%' }}>
+          <MediaList />
         </View>
       </View>
     </View>
@@ -39,15 +43,18 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   content: {
+    flex: 1,
     borderTopWidth: 0.3,
     borderTopColor: '#C8CCD2',
-    paddingTop: 15
+    paddingTop: 15,
+    flexDirection: 'column',
+    gap: 20,
   },
   mediaTitle: {
     flexDirection: 'row',
-    width: 60,
+    width: 75,
     alignItems: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   mediaIcon: {
     width: 13,
