@@ -25,7 +25,7 @@ export default function TabOneScreen() {
           />
           <Text style={[typographyStyles.heading4, { lineHeight: 24 }]}>Media</Text>
         </View>
-        <View style={{ width: '100%', minHeight: 250, height: '50%' }}>
+        <View style={styles.mediaListContainer}>
           <MediaList />
         </View>
       </View>
@@ -60,4 +60,9 @@ const styles = StyleSheet.create({
     width: 13,
     height: 15
   },
+  mediaListContainer: {
+    width: '100%',
+    minHeight: 250,
+    height: '50%'
+  }
 });
