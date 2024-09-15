@@ -3,6 +3,7 @@ import {useGetVideos} from "@/services/getVideos";
 import React, {useRef, useState} from "react";
 import {useVideoPlayer, VideoView} from 'expo-video';
 import {VideoResponse} from "@/services/types";
+import {FullScreenActivityIndicator} from "@/components/fullScreenActivityIndicator";
 
 function VideoPlayer({ item, width }: { item: VideoResponse, width: number }) {
   const player = useVideoPlayer(item.urls.mp4);
@@ -38,28 +39,26 @@ export function MediaList() {
     <View style={styles.fullWidthAndHeight} onLayout={(e) => setContainerWidth(e.nativeEvent.layout.width)}>
       {
         isFetching && !isFetchingNextPage ?
-        <View style={styles.activityIndicatorContainer}>
-          <ActivityIndicator />
-        </View> :
-        <FlatList
-          data={results}
-          horizontal
-          keyExtractor={(i, index) => `video-${index}-${i.id}`}
-          style={styles.fullWidthAndHeight}
-          renderItem={({ item, index }: { item: VideoResponse, index: number }) => <VideoPlayer item={item} width={containerWidth / 2} />}
-          onEndReached={async () => {
-            if (!isFetching && hasNextPage) {
-              await fetchNextPage();
+          <FullScreenActivityIndicator /> :
+          <FlatList
+            data={results}
+            horizontal
+            keyExtractor={(i, index) => `video-${index}-${i.id}`}
+            style={styles.fullWidthAndHeight}
+            renderItem={({ item, index }: { item: VideoResponse, index: number }) => <VideoPlayer item={item} width={containerWidth / 2} />}
+            onEndReached={async () => {
+              if (!isFetching && hasNextPage) {
+                await fetchNextPage();
+              }
+            }}
+            ListFooterComponent={isFetchingNextPage ? (
+                <View style={styles.fetchNextPageActivityIndicatorContainer}>
+                  <ActivityIndicator />
+                </View>
+              ): null
             }
-          }}
-          ListFooterComponent={isFetchingNextPage ? (
-              <View style={styles.fetchNextPageActivityIndicatorContainer}>
-                <ActivityIndicator />
-              </View>
-            ): null
-          }
-          showsHorizontalScrollIndicator={false}
-        />
+            showsHorizontalScrollIndicator={false}
+          />
       }
     </View>
   );

@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {useThemedTypography} from "@/components/Themed";
 import React, {useState} from "react";
 import {Snackbar} from "@/components/snackbar";
@@ -13,34 +13,36 @@ export default function TabOneScreen() {
   const [width, setWidth] = useState(57);
 
   return (
-    <View style={styles.container}>
-      <Text style={[typographyStyles.heading2, styles.greeting]}>Hello John,</Text>
-      <Text style={typographyStyles.heading3}>Please tap below</Text>
-      <Snackbar title="Large font title" subtitle="Sub-title 💎💎💎" />
-      <View style={styles.content}>
-        <View style={styles.mediaTitle}>
-          <Image
-            style={styles.mediaIcon}
-            source={require("@/assets/images/icons/media.png")}
-            contentFit="fill"
-          />
-          <Text style={[typographyStyles.heading4, { lineHeight: 24 }]}>Media</Text>
-        </View>
-        <View style={styles.mediaListContainer}>
-          <MediaList />
-        </View>
-        <Button
-          text="Upload"
-          style={styles.button}
-          Left={() => <Image
+    <ScrollView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <Text style={[typographyStyles.heading2, styles.greeting]}>Hello John,</Text>
+        <Text style={typographyStyles.heading3}>Please tap below</Text>
+        <Snackbar title="Large font title" subtitle="Sub-title 💎💎💎" />
+        <View style={styles.content}>
+          <View style={styles.mediaTitle}>
+            <Image
+              style={styles.mediaIcon}
+              source={require("@/assets/images/icons/media.png")}
+              contentFit="fill"
+            />
+            <Text style={[typographyStyles.heading4, { lineHeight: 24 }]}>Media</Text>
+          </View>
+          <View style={styles.mediaListContainer}>
+            <MediaList />
+          </View>
+          <Button
+            text="Upload"
+            style={styles.button}
+            Left={() => <Image
               style={styles.buttonLeft}
               source={require("@/assets/images/icons/camera.png")}
               contentFit="contain"
             />
-          }
-        />
+            }
+          />
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 

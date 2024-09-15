@@ -107,7 +107,8 @@ export default function TabLayout() {
         options={{
           title: 'Media',
           tabBarIcon: ({ focused }) => focused ?  <MediaLogo /> : <MediaInactiveLogo />,
-          tabBarItemStyle: tabBarItemStyle(tabs[1])
+          tabBarItemStyle: tabBarItemStyle(tabs[1]),
+          headerShown: false,
         }}
       />
       <Tabs.Screen
