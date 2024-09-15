@@ -58,6 +58,10 @@ export function useThemedTypography(preferredScheme ?: keyof typeof Colors): Sty
     subtitle: {
       ...Typography.subtitle,
       color,
+    },
+    button: {
+      ...Typography.button,
+      color,
     }
   }
 }

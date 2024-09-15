@@ -5,6 +5,7 @@ import {Snackbar} from "@/components/snackbar";
 import {Shadow} from "react-native-shadow-2";
 import {Image} from "expo-image";
 import {MediaList} from "@/components/MediaList";
+import {Button} from "@/components/button";
 
 export default function TabOneScreen() {
   const typographyStyles = useThemedTypography();
@@ -28,6 +29,16 @@ export default function TabOneScreen() {
         <View style={styles.mediaListContainer}>
           <MediaList />
         </View>
+        <Button
+          text="Upload"
+          style={styles.button}
+          Left={() => <Image
+              style={styles.buttonLeft}
+              source={require("@/assets/images/icons/camera.png")}
+              contentFit="contain"
+            />
+          }
+        />
       </View>
     </View>
   );
@@ -62,7 +73,13 @@ const styles = StyleSheet.create({
   },
   mediaListContainer: {
     width: '100%',
-    minHeight: 250,
+    minHeight: 225,
     height: '50%'
-  }
+  },
+  button: { width: "100%" },
+  buttonLeft: {
+    width: 21,
+    height: 12,
+    marginRight: 10
+  },
 });

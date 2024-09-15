@@ -32,5 +32,10 @@ export const Typography = StyleSheet.create({
     fontFamily: "SFPro",
     fontSize: 14,
     lineHeight: 24,
+  },
+  button: {
+    fontSize: 16,
+    lineHeight: 18,
+    fontFamily: "SFProMedium",
   }
 })
