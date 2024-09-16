@@ -10,12 +10,22 @@ export interface SnackbarProps {
   subtitle: string;
 }
 export function Snackbar({ title, subtitle }: SnackbarProps) {
-  const [width, setWidth] = useState(styles.iconContainer.width);
+  const [width, setWidth] = useState(0);
   const typographyStyles = useThemedTypography();
 
   return (
-    <Shadow stretch distance={10} startColor={'rgba(102, 102, 102, 0.16)'} offset={[0, 10]}>
-      <View style={styles.container} onLayout={(e) => setWidth(e.nativeEvent.layout.width) }>
+    <Shadow
+      stretch
+      distance={10}
+      startColor={'rgba(102, 102, 102, 0.16)'}
+      offset={[0, 10]}
+      containerStyle={{
+        height: width > 0 ? styles.container.minHeight: undefined,
+      }}
+      containerViewProps={{
+        onLayout: (e) => setWidth(e.nativeEvent.layout.width)
+    }}>
+      <View style={styles.container}>
         <View style={styles.iconContainer}>
           <Image
             style={styles.icon}
