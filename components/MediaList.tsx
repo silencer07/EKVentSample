@@ -6,17 +6,17 @@ import {FullScreenActivityIndicator} from "@/components/fullScreenActivityIndica
 import {useRouter} from "expo-router";
 import {useSharedActiveTab} from "@/hooks";
 import * as VideoThumbnails from 'expo-video-thumbnails';
-import Animated, {runOnUI, useSharedValue} from "react-native-reanimated";
+import {Image} from "expo-image";
 
-// This will be loading screen as generating thumbnail is done on the fly. in real life thumbnails should be done in server
+// Unfortunately generating thumbnail in FE is expensive. app will lag no matter what. in real life thumbnails are served by backend
 function VideoPreview({ item, width }: { item: VideoResponse, width: number }) {
   const router = useRouter();
   const [ ,setActiveTab] = useSharedActiveTab();
 
-  const thumbnail = useSharedValue<string | undefined>(undefined)
+  const [thumbnail, setThumbnail] = useState<string | undefined>(undefined)
 
   useEffect(() => {
-    runOnUI(async (url: string) => {
+    (async (url: string) => {
       try {
         const { uri  } = await VideoThumbnails.getThumbnailAsync(
           url,
@@ -24,7 +24,7 @@ function VideoPreview({ item, width }: { item: VideoResponse, width: number }) {
             time: 0,
           }
         );
-        thumbnail.value = uri;
+        setThumbnail(uri);
       } catch (e) {
         console.log(e);
       }
@@ -33,7 +33,7 @@ function VideoPreview({ item, width }: { item: VideoResponse, width: number }) {
 
   return width > 0 ?
     (
-      <Pressable style={[styles.videoViewerContainer, { width, borderColor: thumbnail.value === undefined ? 'lightgray' : 'transparent' }]}
+      <Pressable style={[styles.videoViewerContainer, { width, borderColor: thumbnail === undefined ? 'lightgray' : 'transparent' }]}
          onPress={() => {
            setActiveTab("two")
            router.push({
@@ -42,10 +42,11 @@ function VideoPreview({ item, width }: { item: VideoResponse, width: number }) {
            });
          }}
       >
-        {thumbnail.value ?
-          <Animated.Image
-            style={[styles.videoView]}
-            source={{ uri: thumbnail.value }}
+        {thumbnail ?
+          <Image
+            style={styles.videoView}
+            source={{ uri: thumbnail }}
+            contentFit="cover"
           /> :
           <ActivityIndicator />
         }
