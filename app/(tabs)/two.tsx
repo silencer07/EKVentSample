@@ -20,7 +20,7 @@ interface VideoPlayerProps {
 const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(
   function ({ item, height }, ref) {
     const player = useVideoPlayer(item.urls.mp4, player => {
-      player.loop = Platform.select({ android: false, default: true });
+      player.loop = true;
       player.play();
     });
 
