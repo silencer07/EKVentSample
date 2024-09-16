@@ -14,15 +14,16 @@ function VideoPlayer({ item, width }: { item: VideoResponse, width: number }) {
 
   return width > 0 ?
     (
-      <Pressable style={styles.videoViewerContainer}
-         onPress={() => {
-           setActiveTab("two")
-           router.push({
-             pathname: "/(tabs)/two",
-             params: {id: item.id}
-           });
-         }
-      }>
+      <View style={styles.videoViewerContainer}>
+        <Pressable style={[StyleSheet.absoluteFillObject,  { zIndex : 1 }]}
+           onPress={() => {
+             setActiveTab("two")
+             router.push({
+               pathname: "/(tabs)/two",
+               params: {id: item.id}
+             });
+           }}
+        />
         <VideoView
           style={[styles.videoView, { width }]}
           contentFit={'cover'}
@@ -30,7 +31,7 @@ function VideoPlayer({ item, width }: { item: VideoResponse, width: number }) {
           allowsFullscreen={false}
           nativeControls={false}
         />
-      </Pressable>
+      </View>
     ) :
     null
 }
