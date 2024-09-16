@@ -260,7 +260,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     zIndex: 1,
-    paddingHorizontal: Spacings.padding
+    padding: Spacings.padding
   },
   headingIcon: { width: 27, height: 16 },
 });
