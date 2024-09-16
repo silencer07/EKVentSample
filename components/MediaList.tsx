@@ -1,66 +1,55 @@
 import {ActivityIndicator, FlatList, Pressable, StyleSheet, View} from "react-native";
 import {useGetVideos} from "@/services/getVideos";
-import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
-import {useVideoPlayer, VideoView} from 'expo-video';
+import React, {useEffect, useState} from "react";
 import {VideoResponse} from "@/services/types";
 import {FullScreenActivityIndicator} from "@/components/fullScreenActivityIndicator";
 import {useRouter} from "expo-router";
 import {useSharedActiveTab} from "@/hooks";
 import * as VideoThumbnails from 'expo-video-thumbnails';
-import {blurhash} from "@/constants/misc";
-import {Image} from "expo-image";
+import Animated, {runOnUI, useSharedValue} from "react-native-reanimated";
 
+// This will be loading screen as generating thumbnail is done on the fly. in real life thumbnails should be done in server
 function VideoPreview({ item, width }: { item: VideoResponse, width: number }) {
   const router = useRouter();
-  const player = useVideoPlayer(item.urls.mp4);
   const [ ,setActiveTab] = useSharedActiveTab();
 
-  const [thumbnail, setThumbnail] = useState<string | undefined>();
+  const thumbnail = useSharedValue<string | undefined>(undefined)
+
   useEffect(() => {
-    (async () => {
+    runOnUI(async (url: string) => {
       try {
-        const { uri } = await VideoThumbnails.getThumbnailAsync(
-          item.urls.mp4,
+        const { uri  } = await VideoThumbnails.getThumbnailAsync(
+          url,
           {
             time: 0,
           }
         );
-        setThumbnail(uri);
+        thumbnail.value = uri;
       } catch (e) {
         console.log(e);
       }
-    })();
+    })(item.urls.mp4);
   }, [item.urls.mp4]);
-
-
 
   return width > 0 ?
     (
-      <View style={styles.videoViewerContainer}>
-        <Pressable style={[StyleSheet.absoluteFillObject,  { zIndex : 1 }]}
-           onPress={() => {
-             setActiveTab("two")
-             router.push({
-               pathname: "/(tabs)/two",
-               params: {id: item.id}
-             });
-           }}
-        />
-        <VideoView
-          style={[styles.videoView, { width }]}
-          contentFit={'cover'}
-          player={player}
-          allowsFullscreen={false}
-          nativeControls={false}
-        />
-        { thumbnail &&
-          <Image
-            style={[styles.videoView, { width }]}
-            source={{ uri: thumbnail }}
-            contentFit="contain"
-          />
+      <Pressable style={[styles.videoViewerContainer, { width, borderColor: thumbnail.value === undefined ? 'lightgray' : 'transparent' }]}
+         onPress={() => {
+           setActiveTab("two")
+           router.push({
+             pathname: "/(tabs)/two",
+             params: {id: item.id}
+           });
+         }}
+      >
+        {thumbnail.value ?
+          <Animated.Image
+            style={[styles.videoView]}
+            source={{ uri: thumbnail.value }}
+          /> :
+          <ActivityIndicator />
         }
-      </View>
+      </Pressable>
     ) :
     null
 }
@@ -111,10 +100,14 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 12,
     overflow: 'hidden',
-    marginRight: 10
+    marginRight: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1
   },
   videoView: {
     height: '100%',
+    width: '100%',
     overflow: 'hidden'
   },
   fullWidthAndHeight: {

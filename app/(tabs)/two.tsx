@@ -6,10 +6,10 @@ import {FullScreenActivityIndicator} from "@/components/fullScreenActivityIndica
 import {useVideoPlayer, VideoView} from "expo-video";
 import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 import {useFocusEffect, useLocalSearchParams} from 'expo-router';
-import {Platform} from "expo-modules-core";
 import {Image} from "expo-image";
 import {useThemeColor} from "@/components/Themed";
 import {ViewToken} from "@react-native/virtualized-lists";
+import {formatNumber} from "@/utils";
 
 interface VideoPlayerRef {
   togglePlayer: (isVisible: boolean) => void
@@ -73,7 +73,9 @@ const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(
                 source={require("@/assets/images/icons/heart-colored.png")}
                 contentFit="fill"
               />
-              <Text style={[styles.iconLabel, { color: textColor }]}>281 k</Text>
+              <Text style={[styles.iconLabel, { color: textColor }]}>
+                {formatNumber(item.likes_count)}
+              </Text>
             </View>
             <View style={styles.commentContainer}>
               <Image
@@ -81,7 +83,9 @@ const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(
                 source={require("@/assets/images/icons/messaged-filled.png")}
                 contentFit="fill"
               />
-              <Text style={[styles.iconLabel, { color: textColor }]}>281 k</Text>
+              <Text style={[styles.iconLabel, { color: textColor }]}>
+                {formatNumber(item.comments_count)}
+              </Text>
             </View>
             <View style={styles.menuContainer}>
               <Image
@@ -209,13 +213,29 @@ const styles = StyleSheet.create({
     right: 30,
     bottom: 26,
     zIndex: 1,
+    alignItems: 'center',
+    minWidth: 40,
+  },
+  likeContainer: {
+    gap: 10,
+    marginBottom: 19,
+    width: "100%",
     alignItems: 'center'
   },
-  likeContainer: { gap: 10, marginBottom: 19 },
   icon: { width: 26, height: 22 },
-  iconLabel: { fontSize: 14, fontFamily: "SFProSemiBold" },
-  commentContainer: { gap: 10, marginBottom: 30 },
+  iconLabel: {
+    fontSize: 14,
+    fontFamily: "SFProSemiBold",
+    width: "100%",
+    textAlign: 'center'
+  },
+  commentContainer: {
+    gap: 10,
+    marginBottom: 30,
+    width: "100%",
+    alignItems: 'center'
+  },
   menuContainer: { marginRight: 7 },
-  menuIcon: { width: 15, height: 5 },
+  menuIcon: { width: 15, height: 5, marginLeft: 5 },
 });
 
