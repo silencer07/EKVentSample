@@ -13,7 +13,6 @@
 
 remaining
 1. elements on top of video tab 2
-3. code cleanup tab 2
 4. fix readme
 5. code review, remove dead code
 6. review google docs if something is missed out
