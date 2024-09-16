@@ -12,3 +12,7 @@
 2. npm run start on one terminal
 3. npm run android on another terminal. Note that the emulator should have at least 2GB of memory to work
 4. npm run ios on another terminal to test on simulator as well
+
+## Caveat:
+
+Since the preview is generated client side, there is no workaround on initial app lag when the app loads on start. In real life video previews/thumbnails are generated on server using efficient format (e.g. webp/png)
