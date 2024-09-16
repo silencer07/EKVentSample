@@ -1,16 +1,38 @@
 import {ActivityIndicator, FlatList, Pressable, StyleSheet, View} from "react-native";
 import {useGetVideos} from "@/services/getVideos";
-import React, {useRef, useState} from "react";
+import React, {useCallback, useEffect, useLayoutEffect, useRef, useState} from "react";
 import {useVideoPlayer, VideoView} from 'expo-video';
 import {VideoResponse} from "@/services/types";
 import {FullScreenActivityIndicator} from "@/components/fullScreenActivityIndicator";
 import {useRouter} from "expo-router";
 import {useSharedActiveTab} from "@/hooks";
+import * as VideoThumbnails from 'expo-video-thumbnails';
+import {blurhash} from "@/constants/misc";
+import {Image} from "expo-image";
 
-function VideoPlayer({ item, width }: { item: VideoResponse, width: number }) {
+function VideoPreview({ item, width }: { item: VideoResponse, width: number }) {
   const router = useRouter();
   const player = useVideoPlayer(item.urls.mp4);
   const [ ,setActiveTab] = useSharedActiveTab();
+
+  const [thumbnail, setThumbnail] = useState<string | undefined>();
+  useEffect(() => {
+    (async () => {
+      try {
+        const { uri } = await VideoThumbnails.getThumbnailAsync(
+          item.urls.mp4,
+          {
+            time: 0,
+          }
+        );
+        setThumbnail(uri);
+      } catch (e) {
+        console.log(e);
+      }
+    })();
+  }, [item.urls.mp4]);
+
+
 
   return width > 0 ?
     (
@@ -31,6 +53,13 @@ function VideoPlayer({ item, width }: { item: VideoResponse, width: number }) {
           allowsFullscreen={false}
           nativeControls={false}
         />
+        { thumbnail &&
+          <Image
+            style={[styles.videoView, { width }]}
+            source={{ uri: thumbnail }}
+            contentFit="contain"
+          />
+        }
       </View>
     ) :
     null
@@ -58,7 +87,7 @@ export function MediaList() {
             horizontal
             keyExtractor={(i, index) => `video-${index}-${i.id}`}
             style={styles.fullWidthAndHeight}
-            renderItem={({ item, index }: { item: VideoResponse, index: number }) => <VideoPlayer item={item} width={containerWidth / 2} />}
+            renderItem={({ item, index }: { item: VideoResponse, index: number }) => <VideoPreview item={item} width={containerWidth / 2} />}
             onEndReached={async () => {
               if (!isFetching && hasNextPage) {
                 await fetchNextPage();

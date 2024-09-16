@@ -17,9 +17,7 @@ import {EventArg} from "@react-navigation/core";
 import {useCustomScreenOptions, useThemeColor} from "@/components/Themed";
 import {Spacings} from "@/constants/Spacings";
 import {useSharedActiveTab} from "@/hooks";
-
-const blurhash =
-  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
+import {blurhash} from "@/constants/misc";
 
 const tabs = ["index", "two", "three", "four", "five"]
 const darkTabs = [tabs[1]];

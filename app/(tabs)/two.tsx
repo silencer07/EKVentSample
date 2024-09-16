@@ -6,6 +6,7 @@ import {FullScreenActivityIndicator} from "@/components/fullScreenActivityIndica
 import {useVideoPlayer, VideoView} from "expo-video";
 import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 import {useFocusEffect, useLocalSearchParams} from 'expo-router';
+import {Platform} from "expo-modules-core";
 
 interface VideoPlayerRef {
   togglePlayer: (isVisible: boolean) => void
@@ -19,16 +20,16 @@ interface VideoPlayerProps {
 const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(
   function ({ item, height }, ref) {
     const player = useVideoPlayer(item.urls.mp4, player => {
-      player.loop = true;
+      player.loop = Platform.select({ android: false, default: true });
       player.play();
     });
 
     const [visible, setVisible] = useState(false)
     useImperativeHandle(ref, () => ({
       togglePlayer: (isVisible: boolean) => {
-        if (isVisible) {
+        if (isVisible ) {
           player.play();
-        } else {
+        } else if (player.playing) {
           player.pause();
           player.currentTime = 0;
         }
@@ -38,12 +39,12 @@ const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(
 
     useFocusEffect(
       useCallback(() => {
-        if (visible) {
+        if (visible && !player.playing) {
           player.play();
         }
 
         return () => {
-          if (visible) {
+          if (visible && player.playing) {
             player.pause();
           }
         };
