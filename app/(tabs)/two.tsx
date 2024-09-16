@@ -7,9 +7,11 @@ import {useVideoPlayer, VideoView} from "expo-video";
 import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
 import {useFocusEffect, useLocalSearchParams} from 'expo-router';
 import {Image} from "expo-image";
-import {useThemeColor} from "@/components/Themed";
+import {useThemeColor, useThemedTypography} from "@/components/Themed";
 import {ViewToken} from "@react-native/virtualized-lists";
 import {formatNumber} from "@/utils";
+import {useSafeAreaInsets} from "react-native-safe-area-context";
+import {Spacings} from "@/constants/Spacings";
 
 interface VideoPlayerRef {
   togglePlayer: (isVisible: boolean) => void
@@ -144,6 +146,9 @@ export default function TabTwoScreen() {
     });
   }, [])
 
+  const typography = useThemedTypography("dark");
+  const { top } = useSafeAreaInsets();
+
   return (
     <>
       <StatusBar hidden />
@@ -151,44 +156,54 @@ export default function TabTwoScreen() {
         {
           isFetching && !isFetchingNextPage ?
             <FullScreenActivityIndicator /> :
-            <FlatList
-              ref={listRef}
-              data={results}
-              keyExtractor={(i, index) => `video-${index}-${i.id}`}
-              style={styles.fullWidthAndHeight}
-              renderItem={({ item, index }: { item: VideoResponse, index: number }) =>
-                <VideoPlayer
-                  height={playerHeight}
-                  item={item}
-                  ref={(element) => {
-                    if (element) listItemRefs.current[item.id] = element;
-                  }}
+            <>
+              <View style={[styles.heading, { top }]}>
+                <Text style={typography.heading1}>Media</Text>
+                <Image
+                  style={styles.headingIcon}
+                  source={require("@/assets/images/icons/camera-outline.png")}
+                  contentFit="fill"
                 />
-              }
-              onEndReached={async () => {
-                if (!isFetching && hasNextPage) {
-                  await fetchNextPage();
+              </View>
+              <FlatList
+                ref={listRef}
+                data={results}
+                keyExtractor={(i, index) => `video-${index}-${i.id}`}
+                style={styles.fullWidthAndHeight}
+                renderItem={({ item, index }: { item: VideoResponse, index: number }) =>
+                  <VideoPlayer
+                    height={playerHeight}
+                    item={item}
+                    ref={(element) => {
+                      if (element) listItemRefs.current[item.id] = element;
+                    }}
+                  />
                 }
-              }}
-              showsVerticalScrollIndicator={false}
-              pagingEnabled
-              snapToInterval={playerHeight}
-              decelerationRate="fast"
-              getItemLayout={(data, index) => ({
-                length: playerHeight,
-                offset: playerHeight * index,
-                index,
-              })}
-              snapToAlignment="start"
-              alwaysBounceVertical={false}
-              initialNumToRender={1}
-              maxToRenderPerBatch={1}
-              windowSize={3}
-              viewabilityConfig={{
-                itemVisiblePercentThreshold: 75
-              }}
-              onViewableItemsChanged={onViewableItemsChanged}
-            />
+                onEndReached={async () => {
+                  if (!isFetching && hasNextPage) {
+                    await fetchNextPage();
+                  }
+                }}
+                showsVerticalScrollIndicator={false}
+                pagingEnabled
+                snapToInterval={playerHeight}
+                decelerationRate="fast"
+                getItemLayout={(data, index) => ({
+                  length: playerHeight,
+                  offset: playerHeight * index,
+                  index,
+                })}
+                snapToAlignment="start"
+                alwaysBounceVertical={false}
+                initialNumToRender={1}
+                maxToRenderPerBatch={1}
+                windowSize={3}
+                viewabilityConfig={{
+                  itemVisiblePercentThreshold: 75
+                }}
+                onViewableItemsChanged={onViewableItemsChanged}
+              />
+            </>
         }
       </View>
     </>
@@ -200,6 +215,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    zIndex: 0,
   },
   fullWidthAndHeight: {
     width: '100%',
@@ -237,5 +253,15 @@ const styles = StyleSheet.create({
   },
   menuContainer: { marginRight: 7 },
   menuIcon: { width: 15, height: 5, marginLeft: 5 },
+  heading: {
+    position: 'absolute',
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    zIndex: 1,
+    paddingHorizontal: Spacings.padding
+  },
+  headingIcon: { width: 27, height: 16 },
 });
 
