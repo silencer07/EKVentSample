@@ -14,8 +14,9 @@ import ReportsInactiveLightLogo from '@/assets/images/tabs/reports-inactive-ligh
 import {Image} from 'expo-image';
 import {StyleSheet, View} from "react-native";
 import {EventArg} from "@react-navigation/core";
-import {useThemeColor} from "@/components/Themed";
+import {useCustomScreenOptions, useThemeColor} from "@/components/Themed";
 import {Spacings} from "@/constants/Spacings";
+import {useSharedActiveTab} from "@/hooks";
 
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
@@ -24,7 +25,7 @@ const tabs = ["index", "two", "three", "four", "five"]
 const darkTabs = [tabs[1]];
 
 export default function TabLayout() {
-  const [activeTab, setActiveTab] = useState('index');
+  const [activeTab, setActiveTab] = useSharedActiveTab();
   const tabPressListener = useCallback((e:  EventArg<"tabPress", true, undefined>) => {
     const parts = e.target?.split("-");
     const rootRoute = parts?.length ? parts[0] : "non-existent-route";
@@ -40,15 +41,13 @@ export default function TabLayout() {
   const isTabNotDark = darkTabs.indexOf(activeTab) === -1;
   const preferredTheme = isTabNotDark ? 'light' : 'dark';
 
-  const tabBarActiveTintColor = useThemeColor('tabBarActiveTintColor', preferredTheme)
-  const tabColor = useThemeColor('tab', preferredTheme);
-  const tabBorderColor = useThemeColor('tabBorder', preferredTheme);
-  const screenBackgroundColor = useThemeColor('screenBackgroundColor', preferredTheme);
+  const customScreenOptions = useCustomScreenOptions(preferredTheme);
+
 
   const tabBarItemStyle = useCallback((tabName: string) => {
-    const additional = { borderTopColor: activeTab === tabName ? tabBarActiveTintColor : 'transparent' };
+    const additional = { borderTopColor: activeTab === tabName ? customScreenOptions.tabBarActiveTintColor : 'transparent' };
     return {...styles.tabBarItemStyle, ...additional};
-    }, [activeTab, tabBarActiveTintColor]
+    }, [activeTab, customScreenOptions.tabBarActiveTintColor]
   );
 
   return (
@@ -56,10 +55,10 @@ export default function TabLayout() {
       screenListeners={{
         tabPress: tabPressListener
       }}
-      sceneContainerStyle={{ backgroundColor: screenBackgroundColor }}
+      sceneContainerStyle={customScreenOptions.sceneContainerStyle}
       screenOptions={{
-        tabBarActiveTintColor,
-        tabBarStyle: { backgroundColor: tabColor, borderColor: tabBorderColor }
+        tabBarActiveTintColor: customScreenOptions.tabBarActiveTintColor,
+        tabBarStyle: customScreenOptions.tabBarStyle
       }}>
       <Tabs.Screen
         name={tabs[0]}
@@ -123,7 +122,7 @@ export default function TabLayout() {
             }
             return <GamesInactiveLogo/>
           },
-          tabBarItemStyle: tabBarItemStyle(tabs[2])
+          tabBarItemStyle: tabBarItemStyle(tabs[2]),
         }}
       />
       <Tabs.Screen
@@ -146,7 +145,7 @@ export default function TabLayout() {
         options={{
           title: 'Account',
           tabBarIcon: ({ color }) => (
-            <View style={[styles.imageContainer, { borderColor: tabBarActiveTintColor }]}>
+            <View style={[styles.imageContainer, { borderColor: customScreenOptions.tabBarActiveTintColor }]}>
               <Image
                 style={styles.image}
                 source={require("@/assets/images/tabs/account.png")}

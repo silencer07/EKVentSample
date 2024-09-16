@@ -1,16 +1,28 @@
-import {ActivityIndicator, FlatList, StyleSheet, View} from "react-native";
+import {ActivityIndicator, FlatList, Pressable, StyleSheet, View} from "react-native";
 import {useGetVideos} from "@/services/getVideos";
 import React, {useRef, useState} from "react";
 import {useVideoPlayer, VideoView} from 'expo-video';
 import {VideoResponse} from "@/services/types";
 import {FullScreenActivityIndicator} from "@/components/fullScreenActivityIndicator";
+import {useRouter} from "expo-router";
+import {useSharedActiveTab} from "@/hooks";
 
 function VideoPlayer({ item, width }: { item: VideoResponse, width: number }) {
+  const router = useRouter();
   const player = useVideoPlayer(item.urls.mp4);
+  const [ ,setActiveTab] = useSharedActiveTab();
 
   return width > 0 ?
     (
-      <View style={styles.videoViewerContainer}>
+      <Pressable style={styles.videoViewerContainer}
+         onPress={() => {
+           setActiveTab("two")
+           router.push({
+             pathname: "/(tabs)/two",
+             params: {id: item.id}
+           });
+         }
+      }>
         <VideoView
           style={[styles.videoView, { width }]}
           contentFit={'cover'}
@@ -18,7 +30,7 @@ function VideoPlayer({ item, width }: { item: VideoResponse, width: number }) {
           allowsFullscreen={false}
           nativeControls={false}
         />
-      </View>
+      </Pressable>
     ) :
     null
 }

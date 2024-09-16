@@ -65,3 +65,16 @@ export function useThemedTypography(preferredScheme ?: keyof typeof Colors): Sty
     }
   }
 }
+
+export function useCustomScreenOptions(preferredTheme ?: keyof typeof Colors ) {
+  const tabBarActiveTintColor = useThemeColor('tabBarActiveTintColor', preferredTheme)
+  const tabColor = useThemeColor('tab', preferredTheme);
+  const tabBorderColor = useThemeColor('tabBorder', preferredTheme);
+  const screenBackgroundColor = useThemeColor('screenBackgroundColor', preferredTheme);
+
+  return {
+    tabBarActiveTintColor,
+    tabBarStyle: { backgroundColor: tabColor, borderColor: tabBorderColor },
+    sceneContainerStyle: { backgroundColor: screenBackgroundColor }
+  }
+}

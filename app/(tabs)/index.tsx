@@ -10,8 +10,6 @@ import {Button} from "@/components/button";
 export default function TabOneScreen() {
   const typographyStyles = useThemedTypography();
 
-  const [width, setWidth] = useState(57);
-
   return (
     <ScrollView style={{ flex: 1 }}>
       <View style={styles.container}>

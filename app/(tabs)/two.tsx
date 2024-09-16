@@ -1,10 +1,11 @@
-import {ActivityIndicator, FlatList, StatusBar, StyleSheet, Text, useWindowDimensions, View} from 'react-native';
+import {FlatList, StatusBar, StyleSheet, useWindowDimensions, View} from 'react-native';
 import {useGetVideos} from "@/services/getVideos";
 import {VideoResponse} from "@/services/types";
-import React, {forwardRef, useImperativeHandle, useRef} from "react";
+import React, {forwardRef, useEffect, useImperativeHandle, useRef} from "react";
 import {FullScreenActivityIndicator} from "@/components/fullScreenActivityIndicator";
 import {useVideoPlayer, VideoView} from "expo-video";
 import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
+import {useLocalSearchParams} from 'expo-router';
 
 interface VideoPlayerRef {
   togglePlayer: (isVisible: boolean) => void
@@ -49,6 +50,9 @@ const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(
       null
   }
 )
+
+// TODO styles should be on styles
+// TODO callbacks should be on useCallback
 export default function TabTwoScreen() {
   const {
     data,
@@ -58,11 +62,25 @@ export default function TabTwoScreen() {
     hasNextPage
   } = useGetVideos();
 
-  const results = data?.pages.flat() || [];
+  const results: VideoResponse[] = data?.pages.flat() || [];
+
   const { height } = useWindowDimensions();
   const tabBarHeight = useBottomTabBarHeight();
   const playerHeight = height - tabBarHeight;
+
+  const listRef = useRef<FlatList | null>(null)
   const listItemRefs = useRef<Record<number, VideoPlayerRef>>({});
+  const { id } = useLocalSearchParams();
+
+  useEffect(() => {
+    if (id && results?.length > 0 && listRef.current) {
+      const idNum = parseInt(id as string, 10);
+      const index = results.findIndex((r) => r.id === idNum)
+      if (index > -1) {
+        listRef.current?.scrollToIndex({ index, animated: false })
+      }
+    }
+  }, [listRef.current, results, id]);
 
   return (
     <>
@@ -72,6 +90,7 @@ export default function TabTwoScreen() {
           isFetching && !isFetchingNextPage ?
             <FullScreenActivityIndicator /> :
             <FlatList
+              ref={listRef}
               data={results}
               keyExtractor={(i, index) => `video-${index}-${i.id}`}
               style={styles.fullWidthAndHeight}
