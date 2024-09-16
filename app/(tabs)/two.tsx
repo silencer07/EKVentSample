@@ -1,11 +1,11 @@
 import {FlatList, StatusBar, StyleSheet, useWindowDimensions, View} from 'react-native';
 import {useGetVideos} from "@/services/getVideos";
 import {VideoResponse} from "@/services/types";
-import React, {forwardRef, useEffect, useImperativeHandle, useRef} from "react";
+import React, {forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState} from "react";
 import {FullScreenActivityIndicator} from "@/components/fullScreenActivityIndicator";
 import {useVideoPlayer, VideoView} from "expo-video";
 import {useBottomTabBarHeight} from "@react-navigation/bottom-tabs";
-import {useLocalSearchParams} from 'expo-router';
+import {useFocusEffect, useLocalSearchParams} from 'expo-router';
 
 interface VideoPlayerRef {
   togglePlayer: (isVisible: boolean) => void
@@ -23,6 +23,7 @@ const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(
       player.play();
     });
 
+    const [visible, setVisible] = useState(false)
     useImperativeHandle(ref, () => ({
       togglePlayer: (isVisible: boolean) => {
         if (isVisible) {
@@ -31,8 +32,23 @@ const VideoPlayer = forwardRef<VideoPlayerRef, VideoPlayerProps>(
           player.pause();
           player.currentTime = 0;
         }
+        setVisible(isVisible);
       }
     }));
+
+    useFocusEffect(
+      useCallback(() => {
+        if (visible) {
+          player.play();
+        }
+
+        return () => {
+          if (visible) {
+            player.pause();
+          }
+        };
+      }, [visible, player])
+    );
 
     return height > 0 ?
       (
